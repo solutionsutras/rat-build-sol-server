@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+var favicon = require('serve-favicon')
+var path = require('path')
+
+app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))
 
 require('dotenv/config');
 const authJwt = require('./helpers/jwt');
@@ -33,7 +37,7 @@ app.use(`${api}/users`,usersRouter)
 app.use(`${api}/orders`,ordersRouter)
 
 mongoose.connect(process.env.CONNECTION_STRING,{
-    useunifiedTopology:true,
+    useunifiedTopology:false,
 })
 .then(()=>{
     console.log('Database Connection Sucessfull')
