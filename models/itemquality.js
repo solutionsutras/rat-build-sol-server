@@ -18,4 +18,4 @@ itemqualitySchema.set('toJSON', {
     virtuals:true,
 });
 
-exports.ItemQuality = mongoose.model('itemquality', itemqualitySchema)
+exports.ItemQuality = mongoose.model('ItemQualities', itemqualitySchema)

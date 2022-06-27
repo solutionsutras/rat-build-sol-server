@@ -44,7 +44,7 @@ router.get(`/`, async (req,res)=>{
         filter = {itemCategory:req.query.itemCategory.split(',')}
     }
     
-    const itemList = await Item_Details.find(filter).populate('itemCategory');
+    const itemList = await Item_Details.find(filter).populate('itemCategory').populate('quality');
     if(!itemList){
         res.status(500).json({success:false})
     }
@@ -53,7 +53,7 @@ router.get(`/`, async (req,res)=>{
 
 // GET BY ID
 router.get('/:id', async (req,res)=>{
-    const item = await Item_Details.findById(req.params.id).populate('itemCategory').exec();
+    const item = await Item_Details.findById(req.params.id).populate('itemCategory').populate('quality').exec();
     // const item = await Item_Details.findById(req.params.id).populate({ path: 'itemCategory', model: 'Categories' });
     // const item = await Item_Details.findById(req.params.id);
     if(!item){

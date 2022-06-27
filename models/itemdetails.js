@@ -23,7 +23,7 @@ const itemsSchema = Schema({
     },
     quality:{
         type: Schema.Types.ObjectId,
-        ref:'ItemQuality',
+        ref:'ItemQualities',
         required: true,
     },
     unit:{
