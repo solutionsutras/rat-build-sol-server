@@ -14,19 +14,19 @@ const vehiclesSchema = Schema({
         required: true,
     },
     capacityInFoot:{
-        type: String,
+        type: Number,
         required: true,
     },
     capacityInCm:{
-        type: String,
+        type: Number,
         required: true,
     },
     capacityInTon:{
-        type: String,
+        type: Number,
         required: true,
     },
     tollTax:{
-        type: String,
+        type: Number,
     }
 });
 

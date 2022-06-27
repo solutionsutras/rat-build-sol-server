@@ -22,7 +22,7 @@ router.get('/:id', async (req,res)=>{
 
 // GET BY VEHICLE BY CAPACITY IN FOOT
 router.get('/get/byfoot/:capacity', async (req,res)=>{
-    const vehicle = await VehiclesModel.find({ capacityInFoot: { $gte: req.params.capacity } });
+    const vehicle = await VehiclesModel.find({ capacityInFoot: { $gte: parseInt(req.params.capacity) } });
     if(!vehicle){
         res.status(500).json({success:false, message:'The Vehicle with the given capcity not found!'})
     }
@@ -31,7 +31,7 @@ router.get('/get/byfoot/:capacity', async (req,res)=>{
 
 // GET BY VEHICLE BY CAPACITY IN CM
 router.get('/get/bycm/:capacity', async (req,res)=>{
-    const vehicle = await VehiclesModel.find({ capacityInCm: { $gte: req.params.capacity } });
+    const vehicle = await VehiclesModel.find({ capacityInCm: { $gte: parseInt(req.params.capacity) } });
     if(!vehicle){
         res.status(500).json({success:false, message:'The Vehicle with the given capcity not found!'})
     }
@@ -40,7 +40,7 @@ router.get('/get/bycm/:capacity', async (req,res)=>{
 
 // GET BY VEHICLE BY CAPACITY IN TON
 router.get('/get/byton/:capacity', async (req,res)=>{
-    const vehicle = await VehiclesModel.find({ capacityInTon: { $gte: req.params.capacity } });
+    const vehicle = await VehiclesModel.find({ capacityInTon: { $gte: parseInt(req.params.capacity) } });
     if(!vehicle){
         res.status(500).json({success:false, message:'The Vehicle with the given capcity not found!'})
     }
