@@ -20,13 +20,15 @@ app.options('*', cors());
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
-app.use(errorHandler)
+app.use('/public/uploads',express.static(__dirname + '/public/uploads'));
+app.use(errorHandler);
 
 // Routes
 const categoriesRouter = require('./routers/categories');
 const itemdetailsRouter = require('./routers/itemdetails');
 const usersRouter = require('./routers/users');
 const ordersRouter = require('./routers/orders');
+const iqRouter = require('./routers/itemquality');
 
 const api= process.env.API_URL;
 
@@ -35,6 +37,7 @@ app.use(`${api}/itemdetails`,itemdetailsRouter)
 app.use(`${api}/categories`,categoriesRouter)
 app.use(`${api}/users`,usersRouter)
 app.use(`${api}/orders`,ordersRouter)
+app.use(`${api}/itemquality`,iqRouter)
 
 mongoose.connect(process.env.CONNECTION_STRING,{
     useunifiedTopology:false,
@@ -47,12 +50,12 @@ mongoose.connect(process.env.CONNECTION_STRING,{
 })
 
 // Development
-// app.listen(3000, ()=>{
-//     console.log("Server Running at http://3000")
-// })
+app.listen(3000, ()=>{
+    console.log("Server Running at http://3000")
+})
 
 // Production
-	var server = app.listen(process.env.PORT || 3000, function(){
-    var port = server.address().port;
-    console.log("Server Running at port: " + port)
-})
+// 	var server = app.listen(process.env.PORT || 3000, function(){
+//     var port = server.address().port;
+//     console.log("Server Running at port: " + port)
+// })

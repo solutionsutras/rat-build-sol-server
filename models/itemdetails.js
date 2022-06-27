@@ -21,6 +21,11 @@ const itemsSchema = Schema({
         type: String,
         required: true,
     },
+    quality:{
+        type: Schema.Types.ObjectId,
+        ref:'ItemQuality',
+        required: true,
+    },
     unit:{
         type: String,
         required: true,

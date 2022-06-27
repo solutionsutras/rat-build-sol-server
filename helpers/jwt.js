@@ -10,11 +10,11 @@ function authJwt() {
             {url:/\/public\/uploads(.*)/, methods:['GET', 'OPTIONS']},
             {url:/\/api\/v1\/itemdetails(.*)/, methods:['GET', 'OPTIONS']},
             {url:/\/api\/v1\/categories(.*)/, methods:['GET', 'OPTIONS']},
+            {url:/\/api\/v1\/itemquality(.*)/, methods:['GET', 'OPTIONS']},
             `${api}/users/login`,
             `${api}/users/register`,
 			`${api}/orders`,
 			`${api}/orderitems`
-			
         ]
     })
 }

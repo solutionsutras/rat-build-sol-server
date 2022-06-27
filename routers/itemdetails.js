@@ -1,5 +1,6 @@
 const {Item_Details} = require('../models/itemdetails');
 const {Categories} = require('../models/categories');
+const {ItemQuality} = require('../models/itemquality')
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -76,13 +77,19 @@ router.post(`/`, uploadOptions.single('image'), async (req,res)=>{
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
     // console.log(basePath);
 
+
+    	
+    const quality = await ItemQuality.findById(req.body.quality);
+    if(!quality) return res.status(400).send('Invalid item quality entered');
+
     let item= new Item_Details({
         itemId: req.body.itemId,
         itemCategory: req.body.itemCategory,
         itemName: req.body.itemName,
         itemDesc: req.body.itemDesc,
-        // image: `${basePath}${fileName}`,
-		image:req.body.image,
+        image: `${basePath}${fileName}`,
+		// image:req.body.image,
+        quality:req.body.quality,
         unit: req.body.unit,
         price: req.body.price,
         discountPercent: req.body.discountPercent,
@@ -132,8 +139,9 @@ router.put('/:id', uploadOptions.single('image'), async (req,res)=>{
             itemCategory: req.body.itemCategory,
             itemName: req.body.itemName,
             itemDesc: req.body.itemDesc,
-			// image: `${basePath}${fileName}`,
-            image: req.body.image,
+			image: `${basePath}${fileName}`,
+            // image: req.body.image,
+            quality:req.body.quality,
             unit: req.body.unit,
             price: req.body.price,
             discountPercent: req.body.discountPercent,
