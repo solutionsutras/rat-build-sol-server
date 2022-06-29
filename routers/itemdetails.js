@@ -83,15 +83,13 @@ router.post(`/`, uploadOptions.single('image'), async (req,res)=>{
     if(!quality) return res.status(400).send('Invalid item quality entered');
 
     let item= new Item_Details({
-        itemId: req.body.itemId,
         itemCategory: req.body.itemCategory,
         itemName: req.body.itemName,
         itemDesc: req.body.itemDesc,
         image: `${basePath}${fileName}`,
 		// image:req.body.image,
         quality:req.body.quality,
-        unit: req.body.unit,
-        price: req.body.price,
+        rates: req.body.rates,
         discountPercent: req.body.discountPercent,
         isFeatured:req.body.isFeatured,
 		isAvailable:req.body.isAvailable,
@@ -135,15 +133,13 @@ router.put('/:id', uploadOptions.single('image'), async (req,res)=>{
     const item = await Item_Details.findByIdAndUpdate(
         req.params.id,
         {
-            itemId: req.body.itemId,
             itemCategory: req.body.itemCategory,
             itemName: req.body.itemName,
             itemDesc: req.body.itemDesc,
 			image: `${basePath}${fileName}`,
             // image: req.body.image,
             quality:req.body.quality,
-            unit: req.body.unit,
-            price: req.body.price,
+            rates: req.body.rates,
             discountPercent: req.body.discountPercent,
             isFeatured:req.body.isFeatured,
 			isAvailable:req.body.isAvailable,

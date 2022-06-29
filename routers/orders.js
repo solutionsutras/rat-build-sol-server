@@ -60,7 +60,7 @@ router.post(`/`,  async (req,res)=>{
 
         return newOrderItem._id;
     }))
-	console.log(orderItemsIds);
+	// console.log(orderItemsIds);
 
     const orderItemsIdsResolved = await orderItemsIds;
 

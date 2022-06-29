@@ -1,72 +1,72 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const itemsSchema = Schema({
-    itemId: {
-        type: Number,
-    },
-    itemCategory:{
+    itemCategory: {
         type: Schema.Types.ObjectId,
-        ref:'Categories',
+        ref: 'Categories',
         required: true,
-    } ,
-    itemName:{
+    },
+    itemName: {
         type: String,
         required: true,
     },
-    itemDesc:{
+    itemDesc: {
         type: String,
         required: true,
     },
-    image:{
+    image: {
         type: String,
         required: true,
     },
-    quality:{
+    quality: {
         type: Schema.Types.ObjectId,
-        ref:'ItemQualities',
+        ref: 'ItemQualities',
         required: true,
     },
-    unit:{
-        type: String,
-        required: true,
-    },
-    price:{
-        type: Number,
-        required: true,
-    },
-    discountPercent:{
+    rates: [{
+        unit: {
+            type: Schema.Types.ObjectId,
+            ref: 'Units',
+            required: true,
+        },
+        cost: {
+            type: Number,
+            required: true,
+        },
+    }],
+    discountPercent: {
         type: Number,
         required: false,
         default: 0,
     },
-    isFeatured:{
-        type:Boolean,
-        default:false,
+    isFeatured: {
+        type: Boolean,
+        default: false,
     },
-    dateCreated:{
-        type:Date,
+    dateCreated: {
+        type: Date,
         default: Date.now,
     },
-	isAvailable:{
-        type:Boolean,
-        default:true,
+    isAvailable: {
+        type: Boolean,
+        default: true,
     },
-	numOfReviews:{
-		type:Number,
-		default:0,
-	},
-	ratings:{
-		type:Number,
-		default:0,
-	},
+    numOfReviews: {
+        type: Number,
+        default: 0,
+    },
+    ratings: {
+        type: Number,
+        default: 0,
+    },
 });
 
-itemsSchema.virtual('id').get(function() {
+itemsSchema.virtual('id').get(function () {
     return this._id.toHexString();
 });
 
 itemsSchema.set('toJSON', {
-    virtuals:true,
+    virtuals: true,
 });
 
 exports.Item_Details = mongoose.model('Item_Details', itemsSchema)

@@ -32,7 +32,6 @@ router.get('/getbyitem/:itemid', async (req,res)=>{
 // POST
 router.post(`/`, async (req,res)=>{
     let unit= new UnitModel({
-        item: req.body.item,
         unitName: req.body.unitName
     })
     unit = await unit.save();
@@ -50,7 +49,6 @@ router.put('/:id', async (req,res)=>{
     const unit = await UnitModel.findByIdAndUpdate(
         req.params.id,
         {
-            item: req.body.item,
             unitName: req.body.unitName
         },
         {new:true}

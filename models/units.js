@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const unitsSchema = Schema({
-    item:{
-        type: Schema.Types.ObjectId,
-        ref: "Item_Details",
-        required: true,
-    },
     unitName:{
         type: String,
         required: true,
