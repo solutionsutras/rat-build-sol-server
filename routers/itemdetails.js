@@ -1,6 +1,6 @@
-const {Item_Details} = require('../models/itemdetails');
-const {Categories} = require('../models/categories');
-const {ItemQuality} = require('../models/itemquality')
+const { Item_Details } = require('../models/itemdetails');
+const { Categories } = require('../models/categories');
+const { ItemQuality } = require('../models/itemquality')
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const isValidFileType = FILE_TYPE_MAP[file.mimetype];
         let uploadError = new Error('invalid image type!');
-        if (isValidFileType){
+        if (isValidFileType) {
             uploadError = null
         }
         cb(uploadError, './public/uploads')
@@ -28,49 +28,56 @@ const storage = multer.diskStorage({
         const extension = FILE_TYPE_MAP[file.mimetype];
         cb(null, `${fileName}-${Date.now()}.${extension}`)
     }
-  })
-  
-  const uploadOptions = multer({ storage: storage });
+})
+
+const uploadOptions = multer({ storage: storage });
 
 
 
 // GET
-router.get(`/`, async (req,res)=>{
-    
+router.get(`/`, async (req, res) => {
+
     let filter = {}
-    
+
     //If Filtering by Category Id
-    if(req.query.itemCategory){
-        filter = {itemCategory:req.query.itemCategory.split(',')}
+    if (req.query.itemCategory) {
+        filter = { itemCategory: req.query.itemCategory.split(',') }
     }
-    
-    const itemList = await Item_Details.find(filter).populate('itemCategory').populate('quality');
-    if(!itemList){
-        res.status(500).json({success:false})
+
+    const itemList = await Item_Details.find(filter)
+        .populate('itemCategory')
+        .populate('quality')
+        .populate({ path: 'rates', populate: ('unit') });
+    if (!itemList) {
+        res.status(500).json({ success: false })
     }
     res.status(200).send(itemList);
 })
 
 // GET BY ID
-router.get('/:id', async (req,res)=>{
-    const item = await Item_Details.findById(req.params.id).populate('itemCategory').populate('quality').exec();
+router.get('/:id', async (req, res) => {
+    const item = await Item_Details.findById(req.params.id)
+        .populate('itemCategory')
+        .populate('quality')
+        .populate({ path: 'rates', populate: ('unit') })
+        .exec();
     // const item = await Item_Details.findById(req.params.id).populate({ path: 'itemCategory', model: 'Categories' });
     // const item = await Item_Details.findById(req.params.id);
-    if(!item){
-        res.status(500).json({success:false, message:'The Item with the given ID not found!'})
+    if (!item) {
+        res.status(500).json({ success: false, message: 'The Item with the given ID not found!' })
     }
     res.status(200).send(item);
 })
 
 // POST
-router.post(`/`, uploadOptions.single('image'), async (req,res)=>{
-	
+router.post(`/`, uploadOptions.single('image'), async (req, res) => {
+
     const category = await Categories.findById(req.body.itemCategory);
-    if(!category) return res.status(400).send('Invalid itemCatgoryId entered')
+    if (!category) return res.status(400).send('Invalid itemCatgoryId entered')
 
     //check if file exists
     const file = req.file;
-    if(!file) return res.status(400).send('No image provided in the request')
+    if (!file) return res.status(400).send('No image provided in the request')
 
     //build file url
     const fileName = req.file.filename
@@ -78,28 +85,28 @@ router.post(`/`, uploadOptions.single('image'), async (req,res)=>{
     // console.log(basePath);
 
 
-    	
-    const quality = await ItemQuality.findById(req.body.quality);
-    if(!quality) return res.status(400).send('Invalid item quality entered');
 
-    let item= new Item_Details({
+    const quality = await ItemQuality.findById(req.body.quality);
+    if (!quality) return res.status(400).send('Invalid item quality entered');
+
+    let item = new Item_Details({
         itemCategory: req.body.itemCategory,
         itemName: req.body.itemName,
         itemDesc: req.body.itemDesc,
         image: `${basePath}${fileName}`,
-		// image:req.body.image,
-        quality:req.body.quality,
+        // image:req.body.image,
+        quality: req.body.quality,
         rates: req.body.rates,
         discountPercent: req.body.discountPercent,
-        isFeatured:req.body.isFeatured,
-		isAvailable:req.body.isAvailable,
-		numOfReviews:req.body.numOfReviews,
-		ratings:req.body.ratings,
+        isFeatured: req.body.isFeatured,
+        isAvailable: req.body.isAvailable,
+        numOfReviews: req.body.numOfReviews,
+        ratings: req.body.ratings,
     })
-    
+
     item = await item.save();
 
-    if(!item){
+    if (!item) {
         return res.status(400).send('the Item cannot be created!')
     }
     res.send(item);
@@ -115,20 +122,20 @@ router.post(`/`, uploadOptions.single('image'), async (req,res)=>{
 })
 
 // UPDATE
-router.put('/:id', uploadOptions.single('image'), async (req,res)=>{
-    if (!mongoose.isValidObjectId(req.params.id)){
+router.put('/:id', uploadOptions.single('image'), async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) {
         return res.status(400).send('Invalid item id !!!')
     }
-	//check if file exists
+    //check if file exists
     const file = req.file;
-    if(!file) return res.status(400).send('No image provided in the request')
+    if (!file) return res.status(400).send('No image provided in the request')
 
     //build file url
     const fileName = req.file.filename
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-	
-	const category = await Categories.findById(req.body.itemCategory);
-    if(!category) return res.status(400).send('Invalid itemCatgoryId !!!');
+
+    const category = await Categories.findById(req.body.itemCategory);
+    if (!category) return res.status(400).send('Invalid itemCatgoryId !!!');
 
     const item = await Item_Details.findByIdAndUpdate(
         req.params.id,
@@ -136,19 +143,19 @@ router.put('/:id', uploadOptions.single('image'), async (req,res)=>{
             itemCategory: req.body.itemCategory,
             itemName: req.body.itemName,
             itemDesc: req.body.itemDesc,
-			image: `${basePath}${fileName}`,
+            image: `${basePath}${fileName}`,
             // image: req.body.image,
-            quality:req.body.quality,
+            quality: req.body.quality,
             rates: req.body.rates,
             discountPercent: req.body.discountPercent,
-            isFeatured:req.body.isFeatured,
-			isAvailable:req.body.isAvailable,
-			numOfReviews:req.body.numOfReviews,
-			ratings:req.body.ratings,
+            isFeatured: req.body.isFeatured,
+            isAvailable: req.body.isAvailable,
+            numOfReviews: req.body.numOfReviews,
+            ratings: req.body.ratings,
         },
-        {new:true}
+        { new: true }
     )
-    if(!item){
+    if (!item) {
         return res.status(400).send('the Item cannot be updated!')
     }
 
@@ -156,42 +163,42 @@ router.put('/:id', uploadOptions.single('image'), async (req,res)=>{
 })
 
 // DELETE
-router.delete('/:id', (req,res)=>{
-    Item_Details.findByIdAndRemove(req.params.id).then(item=>{
-        if(item){
-            return res.status(200).json({success:true,message: 'the item is deleted'})
+router.delete('/:id', (req, res) => {
+    Item_Details.findByIdAndRemove(req.params.id).then(item => {
+        if (item) {
+            return res.status(200).json({ success: true, message: 'the item is deleted' })
         } else {
-            return res.status(404).json({success:false,message: 'the item not found!'})
+            return res.status(404).json({ success: false, message: 'the item not found!' })
         }
-    }).catch(err=>{
-        return res.status(500).json({success:false,error:err})
+    }).catch(err => {
+        return res.status(500).json({ success: false, error: err })
     })
 })
 
 // GET COUNT
-router.get('/get/count', async (req,res)=>{
+router.get('/get/count', async (req, res) => {
     const itemCount = await Item_Details.countDocuments()
-    if(!itemCount){
-        res.status(500).json({success:false})
+    if (!itemCount) {
+        res.status(500).json({ success: false })
     }
-    res.send({itemCount:itemCount});
+    res.send({ itemCount: itemCount });
 })
 
 // GET FEATURED ITEMS
-router.get('/get/featured', async (req,res)=>{
-    const itemList = await Item_Details.find({isFeatured:true})
-    if(!itemList){
-        res.status(500).json({success:false})
+router.get('/get/featured', async (req, res) => {
+    const itemList = await Item_Details.find({ isFeatured: true })
+    if (!itemList) {
+        res.status(500).json({ success: false })
     }
     res.send(itemList);
 })
 
 // GET FEATURED ITEMS WITH LIMIT
-router.get('/get/featured/:limit', async (req,res)=>{
+router.get('/get/featured/:limit', async (req, res) => {
     const limit = req.params.limit ? req.params.limit : 0
-    const itemList = await Item_Details.find({isFeatured:true}).limit(limit)
-    if(!itemList){
-        res.status(500).json({success:false})
+    const itemList = await Item_Details.find({ isFeatured: true }).limit(limit)
+    if (!itemList) {
+        res.status(500).json({ success: false })
     }
     res.send(itemList);
 })
