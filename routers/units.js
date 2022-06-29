@@ -4,7 +4,7 @@ const router = express.Router();
 
 // GET
 router.get(`/`, async (req,res)=>{
-    const unitList = await UnitModel.find().populate('item');
+    const unitList = await UnitModel.find();
     if(!unitList){
         res.status(500).json({success:false})
     }
@@ -13,7 +13,7 @@ router.get(`/`, async (req,res)=>{
 
 // GET BY ID
 router.get('/:id', async (req,res)=>{
-    const unit = await UnitModel.findById(req.params.id).populate('item');
+    const unit = await UnitModel.findById(req.params.id);
     if(!unit){
         res.status(500).json({success:false, message:'The Measurement Unit with the given ID not found!'})
     }
@@ -21,13 +21,13 @@ router.get('/:id', async (req,res)=>{
 })
 
 // GET BY ITEM ID
-router.get('/getbyitem/:itemid', async (req,res)=>{
-    const unit = await UnitModel.find({"item":req.params.itemid}).populate('item');
-    if(!unit){
-        res.status(500).json({success:false, message:'The Measurement Unit with the given Item ID not found!'})
-    }
-    res.status(200).send(unit);
-})
+// router.get('/getbyitem/:itemid', async (req,res)=>{
+//     const unit = await UnitModel.find({"item":req.params.itemid}).populate('item');
+//     if(!unit){
+//         res.status(500).json({success:false, message:'The Measurement Unit with the given Item ID not found!'})
+//     }
+//     res.status(200).send(unit);
+// })
 
 // POST
 router.post(`/`, async (req,res)=>{
