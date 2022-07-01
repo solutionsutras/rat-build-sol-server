@@ -13,6 +13,13 @@ const vehiclesSchema = Schema({
         type: String,
         required: true,
     },
+	fuelType:{
+		type: String,
+	},
+	farePerKm:{
+		type: Number,
+        required: true,
+	},
     capacityInFoot:{
         type: Number,
         required: true,

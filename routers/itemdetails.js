@@ -82,7 +82,6 @@ router.post(`/`, uploadOptions.single('image'), async (req, res) => {
     //build file url
     const fileName = req.file.filename
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-    // console.log(basePath);
 
 
 
