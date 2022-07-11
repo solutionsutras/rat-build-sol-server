@@ -45,4 +45,4 @@ vehiclesSchema.set('toJSON', {
     virtuals:true,
 });
 
-exports.VehiclesModel = mongoose.model('vehicles', vehiclesSchema)
+exports.VehiclesModel = mongoose.model('Vehicles', vehiclesSchema);
