@@ -1,30 +1,30 @@
-const {Users} = require('../models/users');
+const { Users } = require('../models/users');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // GET
-router.get(`/`, async (req,res)=>{
+router.get(`/`, async (req, res) => {
     const userList = await Users.find().select('-passwordHash');
-    if(!userList){
-        res.status(500).json({success:false})
+    if (!userList) {
+        res.status(500).json({ success: false })
     }
     res.status(200).send(userList);
 })
 
 // GET BY ID
-router.get('/:id', async (req,res)=>{
+router.get('/:id', async (req, res) => {
     const user = await Users.findById(req.params.id).select('-passwordHash');
-    if(!user){
-        res.status(500).json({success:false, message:'The uesr with the given ID not found!'})
+    if (!user) {
+        res.status(500).json({ success: false, message: 'The uesr with the given ID not found!' })
     }
     res.status(200).send(user);
 })
 
 // POST
-router.post(`/register`, async (req,res)=>{
-    let user= new Users({
+router.post(`/register`, async (req, res) => {
+    let user = new Users({
         name: req.body.name,
         username: req.body.username,
         email: req.body.email,
@@ -41,7 +41,7 @@ router.post(`/register`, async (req,res)=>{
     })
     user = await user.save();
 
-    if(!user){
+    if (!user) {
         return res.status(400).send('the user cannot be created!')
     }
 
@@ -50,47 +50,52 @@ router.post(`/register`, async (req,res)=>{
 
 //LOGIN
 
-router.post('/login', async (req, res)=>{
-    const user = await Users.findOne({email:req.body.email});
+router.post('/login', async (req, res) => {
+    // const user = await Users.findOne({email:req.body.email});
+    let user = await Users.find({ $or: [{ email: req.body.userId }, { phone: req.body.userId }] });
+    
     const secret = process.env.secret;
-    if(!user){
-        res.status(400).send('The uesr not found!!!')
+    if (!user) {
+        return res.status(400).send('The user email/phone no not found!!!')
+    }else{
+        user = user[0];
+        // console.log(user.passwordHash);
     }
 
-    if(user && bcrypt.compareSync(req.body.password, user.passwordHash)){
+    if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
         const token = jwt.sign(
             {
                 userId: user.id,
                 isAdmin: user.isAdmin,
             },
             secret,
-            {expiresIn:'1d'}
+            { expiresIn: '1d' }
         )
-        res.status(200).send({email:user.email, token: token})
-    }else{
-        res.status(400).send('wrong password entered!!!')
+        return res.status(200).send({ phone:user.phone, email: user.email, token: token })
+    } else {
+        return res.status(400).send('wrong password entered!!!')
     }
 })
 
 // GET COUNT
-router.get('/get/count', async (req,res)=>{
+router.get('/get/count', async (req, res) => {
     const userCount = await Users.countDocuments()
-    if(!userCount){
-        res.status(500).json({success:false})
+    if (!userCount) {
+        res.status(500).json({ success: false })
     }
-    res.send({userCount:userCount});
+    res.send({ userCount: userCount });
 })
 
 // DELETE
-router.delete('/:id', (req,res)=>{
-    Users.findByIdAndRemove(req.params.id).then(user=>{
-        if(user){
-            return res.status(200).json({success:true,message: 'the user is deleted'})
+router.delete('/:id', (req, res) => {
+    Users.findByIdAndRemove(req.params.id).then(user => {
+        if (user) {
+            return res.status(200).json({ success: true, message: 'the user is deleted' })
         } else {
-            return res.status(404).json({success:false,message: 'the user not found!'})
+            return res.status(404).json({ success: false, message: 'the user not found!' })
         }
-    }).catch(err=>{
-        return res.status.apply(400).json({success:false,error:err})
+    }).catch(err => {
+        return res.status.apply(400).json({ success: false, error: err })
     })
 })
 

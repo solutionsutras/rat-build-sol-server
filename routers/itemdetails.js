@@ -32,8 +32,6 @@ const storage = multer.diskStorage({
 
 const uploadOptions = multer({ storage: storage });
 
-
-
 // GET
 router.get(`/`, async (req, res) => {
 
