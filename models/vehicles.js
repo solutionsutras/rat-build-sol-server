@@ -23,7 +23,7 @@ const vehiclesSchema = Schema({
 	minFare:{
 		type: Number,
         required: true,
-	}
+	},
     capacityInFoot:{
         type: Number,
         required: true,
