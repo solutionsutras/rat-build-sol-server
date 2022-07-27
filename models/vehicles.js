@@ -20,6 +20,10 @@ const vehiclesSchema = Schema({
 		type: Number,
         required: true,
 	},
+	minFare:{
+		type: Number,
+        required: true,
+	}
     capacityInFoot:{
         type: Number,
         required: true,
@@ -32,6 +36,10 @@ const vehiclesSchema = Schema({
         type: Number,
         required: true,
     },
+	tollApplicable:{
+		type: Boolean,
+        default: false,
+	},
     tollTax:{
         type: Number,
     }

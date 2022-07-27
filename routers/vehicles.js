@@ -55,9 +55,11 @@ router.post(`/`, async (req,res)=>{
         model: req.body.model,
         fuelType: req.body.fuelType,
         farePerKm: req.body.farePerKm,
+		minFare: req.body.minFare,
         capacityInFoot: req.body.capacityInFoot,
         capacityInCm: req.body.capacityInCm,
         capacityInTon: req.body.capacityInTon,
+		tollApplicable: req.body.tollApplicable,
         tollTax: req.body.tollTax
     })
     vehicle = await vehicle.save();
@@ -80,9 +82,11 @@ router.put('/:id', async (req,res)=>{
             model: req.body.model,
 			fuelType: req.body.fuelType,
 			farePerKm: req.body.farePerKm,
+			minFare: req.body.minFare,
             capacityInFoot: req.body.capacityInFoot,
             capacityInCm: req.body.capacityInCm,
             capacityInTon: req.body.capacityInTon,
+			tollApplicable: req.body.tollApplicable,
             tollTax: req.body.tollTax
         },
         {new:true}
