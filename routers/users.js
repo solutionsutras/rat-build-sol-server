@@ -22,6 +22,30 @@ router.get('/:id', async (req, res) => {
     res.status(200).send(user);
 })
 
+// GET BY PHONE NUMBER
+router.get('/getbynum/:num', async (req, res) => {
+  const userRec = await Users.find({ phone: req.params.num });
+  if (!userRec) {
+    res.status(500).json({
+      success: false,
+      message: 'The user not found!',
+    });
+  }
+  res.status(200).send(userRec);
+});
+
+// GET BY PHONE EMAIL ID
+router.get('/getbyemail/:email', async (req, res) => {
+  const userRec = await Users.find({ email: req.params.email });
+  if (!userRec) {
+    res.status(500).json({
+      success: false,
+      message: 'The user not found!',
+    });
+  }
+  res.status(200).send(userRec);
+});
+
 // POST
 router.post(`/register`, async (req, res) => {
     let user = new Users({
