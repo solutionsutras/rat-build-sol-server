@@ -17,7 +17,6 @@ function authJwt() {
         { url: /\/api\/v1\/users\/getbyemail(.*)/, methods: ['GET', 'OPTIONS'] },
         `${api}/users/login`,
         `${api}/users/register`,
-        `${api}/users/getbynum`,
         `${api}/orders`,
         `${api}/orderitems`,
         /\/otpsms*/,
