@@ -14,8 +14,12 @@ function authJwt() {
         { url: /\/api\/v1\/units(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/vehicles(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/users\/getbynum(.*)/, methods: ['GET', 'OPTIONS'] },
-        { url: /\/api\/v1\/users\/getbyemail(.*)/, methods: ['GET', 'OPTIONS'] },
+        {
+          url: /\/api\/v1\/users\/getbyemail(.*)/,
+          methods: ['GET', 'OPTIONS'],
+        },
         `${api}/users/login`,
+        `${api}/users/otplogin`,
         `${api}/users/register`,
         `${api}/orders`,
         `${api}/orderitems`,

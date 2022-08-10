@@ -101,6 +101,32 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.post('/otplogin', async (req, res) => {
+    
+    let user = await Users.find({ phone: req.body.userId });
+    
+    const secret = process.env.secret;
+    if (!user) {
+        return res.status(400).send('The user email/phone no not found!!!')
+    }else{
+        user = user[0];
+    }
+    
+    if (user && (req.body.password === user.passwordHash)) {
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                isAdmin: user.isAdmin,
+            },
+            secret,
+            { expiresIn: '1d' }
+        )
+        return res.status(200).send({ phone:user.phone, email: user.email, token: token })
+    } else {
+        return res.status(400).send('wrong password entered!!!')
+    }
+})
+
 // GET COUNT
 router.get('/get/count', async (req, res) => {
     const userCount = await Users.countDocuments()
