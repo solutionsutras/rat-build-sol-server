@@ -71,7 +71,7 @@ router.get('/:id', async (req, res) => {
 router.post(`/`, uploadOptions.single('image'), async (req, res) => {
 
     const category = await Categories.findById(req.body.itemCategory);
-    if (!category) return res.status(400).send('Invalid itemCatgoryId entered')
+    if (!category) return res.status(400).send('Invalid itemCatgoryId selected')
 
     //check if file exists
     const file = req.file;
@@ -81,17 +81,20 @@ router.post(`/`, uploadOptions.single('image'), async (req, res) => {
     const fileName = req.file.filename
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
-
+    const rates = req.body.rates;
+    if(rates){
+        
+    }
 
     const quality = await ItemQuality.findById(req.body.quality);
-    if (!quality) return res.status(400).send('Invalid item quality entered');
+    if (!quality) return res.status(400).send('Invalid item quality selected');
 
     let item = new Item_Details({
         itemCategory: req.body.itemCategory,
         itemName: req.body.itemName,
         itemDesc: req.body.itemDesc,
-        image: `${basePath}${fileName}`,
-        // image:req.body.image,
+        // image: `${basePath}${fileName}`,
+        image:req.body.image,
         quality: req.body.quality,
         rates: req.body.rates,
         discountPercent: req.body.discountPercent,
@@ -140,8 +143,8 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
             itemCategory: req.body.itemCategory,
             itemName: req.body.itemName,
             itemDesc: req.body.itemDesc,
-            image: `${basePath}${fileName}`,
-            // image: req.body.image,
+            // image: `${basePath}${fileName}`,
+            image: req.body.image,
             quality: req.body.quality,
             rates: req.body.rates,
             discountPercent: req.body.discountPercent,
