@@ -81,10 +81,10 @@ router.post(`/`, uploadOptions.single('image'), async (req, res) => {
     const fileName = req.file.filename
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
-    const rates = req.body.rates;
-    if(rates){
+    // const rates = req.body.rates;
+    // if(rates){
         
-    }
+    // }
 
     const quality = await ItemQuality.findById(req.body.quality);
     if (!quality) return res.status(400).send('Invalid item quality selected');
