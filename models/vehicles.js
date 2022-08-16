@@ -36,6 +36,10 @@ const vehiclesSchema = Schema({
         type: Number,
         required: true,
     },
+	loadUnloadCost:{
+		type: Number,
+		default: 0,
+	},
 	tollApplicable:{
 		type: Boolean,
         default: false,

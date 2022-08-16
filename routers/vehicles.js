@@ -59,6 +59,7 @@ router.post(`/`, async (req,res)=>{
         capacityInFoot: req.body.capacityInFoot,
         capacityInCm: req.body.capacityInCm,
         capacityInTon: req.body.capacityInTon,
+		loadUnloadCost: req.body.loadUnloadCost,
 		tollApplicable: req.body.tollApplicable,
         tollTax: req.body.tollTax
     })
@@ -86,6 +87,7 @@ router.put('/:id', async (req,res)=>{
             capacityInFoot: req.body.capacityInFoot,
             capacityInCm: req.body.capacityInCm,
             capacityInTon: req.body.capacityInTon,
+			loadUnloadCost: req.body.loadUnloadCost,
 			tollApplicable: req.body.tollApplicable,
             tollTax: req.body.tollTax
         },
