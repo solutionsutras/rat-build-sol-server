@@ -41,6 +41,26 @@ const ordersSchema = Schema({
     totalPrice:{
         type: Number,
     },
+	transactions:[{
+        type: Schema.Types.ObjectId,
+        ref:'Transactions',
+    }],
+	discountPercent:{
+		type: Number,
+		default:0,
+	},
+	advanceToPay:{
+		type: Number,
+		default:0,
+	},
+	advancePaid:{
+		type: Number,
+		default:0,
+	},
+	balanceToPay:{
+		type: Number,
+		default:0,
+	},
     user:{
         type: Schema.Types.ObjectId,
         ref:'Users',

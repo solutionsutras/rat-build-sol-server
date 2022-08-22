@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+	
 const itemqualitySchema = mongoose.Schema({
     qualityName:{
         type: String,
