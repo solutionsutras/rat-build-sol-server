@@ -1,4 +1,5 @@
-	
+const mongoose = require('mongoose');
+const { Schema } = mongoose;	
 const itemqualitySchema = mongoose.Schema({
     qualityName:{
         type: String,
