@@ -28,6 +28,10 @@ function authJwt() {
           url: /\/api\/v1\/users\/getbyemail(.*)/,
           methods: ['GET', 'OPTIONS'],
         },
+        {
+          url: /\/api\/v1\/controls\/getbytype(.*)/,
+          methods: ['GET', 'OPTIONS'],
+        },
         `${api}/users/login`,
         `${api}/users/otplogin`,
         `${api}/users/register`,
