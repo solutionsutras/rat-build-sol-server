@@ -25,7 +25,7 @@ const transactionsSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: 'Users',
     required: true,
-  },
+  }
 });
 
 transactionsSchema.virtual('id').get(function() {

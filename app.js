@@ -32,6 +32,7 @@ const iqRouter = require('./routers/itemquality');
 const unitsRouter = require('./routers/units');
 const vehiclesRouter = require('./routers/vehicles');
 const otpSmsRouter = require('./routers/otpsms');
+const transactionsRouter = require('./routers/transactions');
 
 const api= process.env.API_URL;
 
@@ -44,6 +45,7 @@ app.use(`${api}/itemquality`,iqRouter)
 app.use(`${api}/units`,unitsRouter)
 app.use(`${api}/vehicles`,vehiclesRouter)
 app.use(`${api}/otpsms`,otpSmsRouter)
+app.use(`${api}/transactions`, transactionsRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{
     useunifiedTopology:false,

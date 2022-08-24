@@ -15,6 +15,15 @@ function authJwt() {
         { url: /\/api\/v1\/vehicles(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/users\/getbynum(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/orders(.*)/, methods: ['GET', 'OPTIONS'] },
+        { url: /\/api\/v1\/transactions(.*)/, methods: ['GET', 'OPTIONS'] },
+        {
+          url: /\/api\/v1\/transactions\/getbyuser(.*)/,
+          methods: ['GET', 'OPTIONS'],
+        },
+        {
+          url: /\/api\/v1\/transactions\/getbydate(.*)/,
+          methods: ['GET', 'OPTIONS'],
+        },
         {
           url: /\/api\/v1\/users\/getbyemail(.*)/,
           methods: ['GET', 'OPTIONS'],
@@ -24,6 +33,8 @@ function authJwt() {
         `${api}/users/register`,
         `${api}/orders`,
         `${api}/orderitems`,
+        `${api}/transactions`,
+        `${api}/transactions/get/count`,
         /\/otpsms*/,
       ],
     });

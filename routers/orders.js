@@ -9,12 +9,12 @@ router.get(`/`, async (req, res) => {
   const ordersList = await Orders.find()
     .populate({
       path: 'orderItems',
-	  model: 'OrderItems',
-	  polulate: 'selectedUnit', 
+      model: 'OrderItems',
+      polulate: 'selectedUnit',
       populate: {
         path: 'item',
         populate: 'itemCategory quality',
-      }
+      },
     })
     .populate('user', 'name')
     .sort({ dateOrdered: -1 });
@@ -68,7 +68,7 @@ router.post(`/`, async (req, res) => {
       let newOrderItem = new OrderItems({
         item: orderItem.item,
         selectedUnit: orderItem.selectedUnit,
-		unitName: orderItem.unitName,
+        unitName: orderItem.unitName,
         rate: orderItem.rate,
         quantity: orderItem.qty,
         materialCost: orderItem.materialCost,
@@ -110,6 +110,11 @@ router.post(`/`, async (req, res) => {
     phone: req.body.phone,
     status: req.body.status,
     totalPrice: totalPriceSummed,
+    transactions: req.body.transactions,
+    discountPercent: req.body.discountPercent,
+    advanceToPay: req.body.advanceToPay,
+    advancePaid: req.body.advancePaid,
+    balanceToPay: req.body.balanceToPay,
     user: req.body.user,
   });
 
@@ -128,6 +133,9 @@ router.put('/:id', async (req, res) => {
     req.params.id,
     {
       status: req.body.status,
+      discountPercent: req.body.discountPercent,
+      advancePaid: req.body.advancePaid,
+      balanceToPay: req.body.balanceToPay,
     },
     { new: true }
   );
