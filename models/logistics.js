@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const logisticsSchema = Schema({
-  vehicles: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Vehicles',
-      required: true,
-    },
-  ],
+  vehicle: {
+    type: Schema.Types.ObjectId,
+    ref: 'Vehicles',
+    required: true,
+  },
   order: {
     type: Schema.Types.ObjectId,
     ref: 'Orders',
@@ -18,6 +16,11 @@ const logisticsSchema = Schema({
     ref: 'OrderItems',
     required: true,
   },
+  driver: {
+    type: Schema.Types.ObjectId,
+    ref: 'Users',
+    required: true,
+  },
   dateOfBooking: {
     type: Date,
     default: Date.now,
@@ -25,11 +28,11 @@ const logisticsSchema = Schema({
 });
 
 logisticsSchema.virtual('id').get(function () {
-    return this._id.toHexString();
+  return this._id.toHexString();
 });
 
 logisticsSchema.set('toJSON', {
-    virtuals: true,
+  virtuals: true,
 });
 
 exports.Logistics = mongoose.model('Logistics', logisticsSchema);

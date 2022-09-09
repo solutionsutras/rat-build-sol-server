@@ -35,6 +35,7 @@ const otpSmsRouter = require('./routers/otpsms');
 const transactionsRouter = require('./routers/transactions');
 const controlsRouter = require('./routers/controls');
 const orderStatusRouter = require('./routers/orderstatus');
+const logisticsRouter = require('./routers/logistics');
 
 const api= process.env.API_URL;
 
@@ -50,6 +51,7 @@ app.use(`${api}/otpsms`,otpSmsRouter)
 app.use(`${api}/transactions`, transactionsRouter);
 app.use(`${api}/controls`, controlsRouter);
 app.use(`${api}/orderstatus`, orderStatusRouter);
+app.use(`${api}/logistics`, logisticsRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{
     useunifiedTopology:false,
