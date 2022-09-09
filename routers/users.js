@@ -49,20 +49,19 @@ router.get('/getbyemail/:email', async (req, res) => {
 // POST
 router.post(`/register`, async (req, res) => {
     let user = new Users({
-        name: req.body.name,
-        username: req.body.username,
-        email: req.body.email,
-        phone: req.body.phone,
-        passwordHash: bcrypt.hashSync(req.body.password, 10),
-        isAdmin: req.body.isAdmin,
-        address: req.body.address,
-        city: req.body.city,
-        pin: req.body.pin,
-        state: req.body.state,
-        country: req.body.country,
-        avtar: req.body.avtar,
-
-    })
+      name: req.body.name,
+      username: req.body.username,
+      email: req.body.email,
+      phone: req.body.phone,
+      passwordHash: bcrypt.hashSync(req.body.password, 10),
+      userRoll: req.body.userRoll,
+      address: req.body.address,
+      city: req.body.city,
+      pin: req.body.pin,
+      state: req.body.state,
+      country: req.body.country,
+      avtar: req.body.avtar,
+    });
     user = await user.save();
 
     if (!user) {
@@ -88,13 +87,13 @@ router.post('/login', async (req, res) => {
 
     if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
         const token = jwt.sign(
-            {
-                userId: user.id,
-                isAdmin: user.isAdmin,
-            },
-            secret,
-            { expiresIn: '1d' }
-        )
+          {
+            userId: user.id,
+            userRoll: user.userRoll,
+          },
+          secret,
+          { expiresIn: '1d' }
+        );
         return res.status(200).send({ phone:user.phone, email: user.email, token: token })
     } else {
         return res.status(400).send('wrong password entered!!!')
@@ -114,13 +113,13 @@ router.post('/otplogin', async (req, res) => {
     
     if (user && (req.body.password === user.passwordHash)) {
         const token = jwt.sign(
-            {
-                userId: user.id,
-                isAdmin: user.isAdmin,
-            },
-            secret,
-            { expiresIn: '1d' }
-        )
+          {
+            userId: user.id,
+            userRoll: user.userRoll,
+          },
+          secret,
+          { expiresIn: '1d' }
+        );
         return res.status(200).send({ phone:user.phone, email: user.email, token: token })
     } else {
         return res.status(400).send('wrong password entered!!!')

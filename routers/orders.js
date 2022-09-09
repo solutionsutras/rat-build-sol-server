@@ -10,11 +10,11 @@ router.get(`/`, async (req, res) => {
     .populate({
       path: 'orderItems',
       model: 'OrderItems',
-      polulate: 'selectedUnit',
-      populate: {
-        path: 'item',
-        populate: 'itemCategory quality',
-      },
+      populate: [
+        { path: 'item', populate: 'itemCategory quality' },
+        { path: 'selectedUnit' },
+        { path: 'vehicle' },
+      ],
     })
     .populate('user', 'name')
     .sort({ dateOrdered: -1 });
@@ -136,6 +136,7 @@ router.put('/:id', async (req, res) => {
       discountPercent: req.body.discountPercent,
       advancePaid: req.body.advancePaid,
       balanceToPay: req.body.balanceToPay,
+      transactions: req.body.transactions,
     },
     { new: true }
   );

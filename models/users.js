@@ -20,9 +20,9 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    isAdmin:{
-        type: Boolean,
-        default: false,
+    userRoll:{
+        type: String,
+        default: 'user',
     },
     address:{
         type: String,

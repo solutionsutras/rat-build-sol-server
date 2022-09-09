@@ -11,6 +11,8 @@ function authJwt() {
         { url: /\/api\/v1\/itemdetails(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/categories(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/itemquality(.*)/, methods: ['GET', 'OPTIONS'] },
+        { url: /\/api\/v1\/orderstatus(.*)/, methods: ['GET', 'OPTIONS'] },
+        { url: /\/api\/v1\/orderstatus(.*)/, methods: ['PUT', 'OPTIONS'] },
         { url: /\/api\/v1\/units(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/vehicles(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/users\/getbynum(.*)/, methods: ['GET', 'OPTIONS'] },
@@ -30,6 +32,10 @@ function authJwt() {
         },
         {
           url: /\/api\/v1\/controls\/getbytype(.*)/,
+          methods: ['GET', 'OPTIONS'],
+        },
+        {
+          url: /\/api\/v1\/orderstatus\/getbytext(.*)/,
           methods: ['GET', 'OPTIONS'],
         },
         `${api}/users/login`,
