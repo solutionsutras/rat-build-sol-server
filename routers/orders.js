@@ -78,6 +78,7 @@ router.post(`/`, async (req, res) => {
         tripDistance: orderItem.tripDistance,
         transportationCost: orderItem.transportationCost,
         itemTotal: orderItem.itemTotal,
+        logistics: req.body.logistics,
       });
 
       newOrderItem = await newOrderItem.save();

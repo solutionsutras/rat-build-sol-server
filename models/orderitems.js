@@ -46,6 +46,12 @@ const orderItemsSchema = Schema({
     type: Number,
     required: true,
   },
+  logistics: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Logistics',
+    },
+  ],
 });
 
 orderItemsSchema.virtual('id').get(function () {
