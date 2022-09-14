@@ -47,6 +47,15 @@ router.get('/get/byton/:capacity', async (req,res)=>{
     res.status(200).send(vehicle);
 })
 
+// GET VEHICLES COUNT
+router.get('/get/count', async (req, res) => {
+  const vehiclesCount = await VehiclesModel.countDocuments();
+  if (!vehiclesCount) {
+    res.status(500).json({ success: false });
+  }
+  res.send({ vehiclesCount: vehiclesCount });
+});
+
 // POST
 router.post(`/`, async (req,res)=>{
     let vehicle= new VehiclesModel({

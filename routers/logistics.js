@@ -11,7 +11,17 @@ router.get(`/`, async (req, res) => {
   const logisticsList = await Logistics.find()
     .populate('vehicle')
     .populate('order')
-    .populate('orderItem')
+    // .populate('orderItem')
+    // .populate({
+    //   path: 'orderItem',
+    //   model: 'OrderItems',
+    //   populate: [{ path: 'item' }],
+    // })
+    .populate({
+      path: 'orderItem',
+      model: 'OrderItems',
+      populate: ({ path: 'item', populate: 'quality' }),
+    })
     .populate('driver');
   if (!logisticsList) {
     res.status(500).json({ success: false });
@@ -34,6 +44,16 @@ router.get('/:id', async (req, res) => {
   }
   res.status(200).send(logistic);
 });
+
+// GET COUNT
+router.get('/get/count', async (req, res) => {
+    const logisticsCount = await Logistics.countDocuments()
+    if (!logisticsCount) {
+      res.status(500).json({ success: false });
+    }
+    res.send({ logisticsCount: logisticsCount });
+})
+
 
 // POST
 router.post(`/`, async (req, res) => {

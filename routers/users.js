@@ -46,6 +46,19 @@ router.get('/getbyemail/:email', async (req, res) => {
   res.status(200).send(userRec);
 });
 
+// GET BY PHONE EMAIL ID
+router.get('/getbyroll/:roll', async (req, res) => {
+  const userRec = await Users.find({ userRoll: req.params.roll });
+  
+  if (!userRec) {
+    res.status(500).json({
+      success: false,
+      message: 'The user not found!',
+    });
+  }
+  res.status(200).send(userRec);
+});
+
 // POST
 router.post(`/register`, async (req, res) => {
     let user = new Users({

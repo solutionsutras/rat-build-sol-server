@@ -57,6 +57,15 @@ router.get('/getbydate/:fromdate/:todate', async (req, res) => {
   res.status(200).send(transactionsList);
 });
 
+// GET COUNT
+router.get('/get/count', async (req, res) => {
+    const transactionsCount = await Transactions.countDocuments()
+    if (!transactionsCount) {
+      res.status(500).json({ success: false });
+    }
+    res.send({ transactionsCount: transactionsCount });
+})
+
 // POST
 router.post('/', async (req, res) => {
   const chksUser = await Users.findById(req.body.user);
