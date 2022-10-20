@@ -27,13 +27,27 @@ router.get('/:id', async (req,res)=>{
 
 // GET BY ORDER STAUS TEXT
 router.get('/getbytext/:text', async (req, res) => {
-  const orderStatus = await OrderStatus.find({
+  const orderStatus = await OrderStatus.findOne({
     statusText: req.params.text,
   });
   if (!orderStatus) {
     res.status(500).json({
       success: false,
       message: 'No status record found for the selected text!',
+    });
+  }
+  res.status(200).send(orderStatus);
+});
+
+// GET BY STAUS CODE
+router.get('/getbycode/:text', async (req, res) => {
+  const orderStatus = await OrderStatus.findOne({
+    statusCode: req.params.text,
+  });
+  if (!orderStatus) {
+    res.status(500).json({
+      success: false,
+      message: 'No status record found for the selected code!',
     });
   }
   res.status(200).send(orderStatus);

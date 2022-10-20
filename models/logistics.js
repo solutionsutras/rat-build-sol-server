@@ -21,9 +21,16 @@ const logisticsSchema = Schema({
     ref: 'Users',
     required: true,
   },
+  quantityShipped: {
+    type: Number,
+    required: true,
+  },
   dateOfBooking: {
     type: Date,
     default: Date.now,
+  },
+  expectedDateOfDelivery: {
+    type: Date,
   },
 });
 

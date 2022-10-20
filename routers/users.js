@@ -59,6 +59,15 @@ router.get('/getbyroll/:roll', async (req, res) => {
   res.status(200).send(userRec);
 });
 
+// GET COUNT
+router.get('/get/count', async (req, res) => {
+    const usersCount = await Users.countDocuments()
+    if (!usersCount && usersCount !== 0) {
+      res.status(500).json({ success: false });
+    }
+    res.send({ usersCount: usersCount });
+})
+
 // POST
 router.post(`/register`, async (req, res) => {
     let user = new Users({
@@ -137,15 +146,6 @@ router.post('/otplogin', async (req, res) => {
     } else {
         return res.status(400).send('wrong password entered!!!')
     }
-})
-
-// GET COUNT
-router.get('/get/count', async (req, res) => {
-    const userCount = await Users.countDocuments()
-    if (!userCount) {
-        res.status(500).json({ success: false })
-    }
-    res.send({ userCount: userCount });
 })
 
 // DELETE

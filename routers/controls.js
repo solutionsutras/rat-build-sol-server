@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 
 // GET BY RECORD TYPE
 router.get('/getbytype/:recType', async (req, res) => {
-  const controlRec = await Controls.find({
+  const controlRec = await Controls.findOne({
     recType: req.params.recType,
   }).populate('createdByUser lastUpdatedByUser');
   if (!controlRec) {

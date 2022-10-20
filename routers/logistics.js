@@ -45,10 +45,27 @@ router.get('/:id', async (req, res) => {
   res.status(200).send(logistic);
 });
 
+// GET BY ORDERITEM
+router.get('/getbyorderitem/:id', async (req, res) => {
+  const logistic = await Logistics.find({ orderItem:req.params.id })
+    .populate('vehicle')
+    // .populate('order')
+    .populate('orderItem')
+    .populate('driver');
+  if (!logistic) {
+    res.status(500).json({
+      success: false,
+      message: 'The Logistics record with the given ID not found!',
+    });
+  }
+  res.status(200).send(logistic);
+});
+
+
 // GET COUNT
 router.get('/get/count', async (req, res) => {
     const logisticsCount = await Logistics.countDocuments()
-    if (!logisticsCount) {
+    if (!logisticsCount && logisticsCount !== 0) {
       res.status(500).json({ success: false });
     }
     res.send({ logisticsCount: logisticsCount });
@@ -73,7 +90,9 @@ router.post(`/`, async (req, res) => {
     vehicle: req.body.vehicle,
     order: req.body.order,
     orderItem: req.body.orderItem,
+    quantityShipped: req.body.quantityShipped,
     driver: req.body.driver,
+    expectedDateOfDelivery: req.body.expectedDateOfDelivery,
   });
   logistic = await logistic.save();
 

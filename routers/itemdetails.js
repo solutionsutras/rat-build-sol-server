@@ -177,11 +177,11 @@ router.delete('/:id', (req, res) => {
 
 // GET COUNT
 router.get('/get/count', async (req, res) => {
-    const itemCount = await Item_Details.countDocuments()
-    if (!itemCount) {
-        res.status(500).json({ success: false })
+    const itemsCount = await Item_Details.countDocuments()
+    if (!itemsCount && itemsCount !== 0) {
+      res.status(500).json({ success: false });
     }
-    res.send({ itemCount: itemCount });
+    res.send({ itemsCount: itemsCount });
 })
 
 // GET FEATURED ITEMS

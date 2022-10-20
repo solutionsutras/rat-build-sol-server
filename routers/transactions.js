@@ -1,4 +1,4 @@
-const {Users} = require('../models/users')
+const { Users } = require('../models/users');
 const { Transactions } = require('../models/transactions');
 const express = require('express');
 const router = express.Router();
@@ -59,12 +59,12 @@ router.get('/getbydate/:fromdate/:todate', async (req, res) => {
 
 // GET COUNT
 router.get('/get/count', async (req, res) => {
-    const transactionsCount = await Transactions.countDocuments()
-    if (!transactionsCount) {
-      res.status(500).json({ success: false });
-    }
-    res.send({ transactionsCount: transactionsCount });
-})
+  const transactionsCount = await Transactions.countDocuments();
+  if (!transactionsCount && transactionsCount !== 0) {
+    res.status(500).json({ success: false });
+  }
+  res.send({ transactionsCount: transactionsCount });
+});
 
 // POST
 router.post('/', async (req, res) => {
@@ -85,15 +85,6 @@ router.post('/', async (req, res) => {
   }
 
   res.send(transction);
-});
-
-// GET COUNT
-router.get('/get/count', async (req, res) => {
-  const transactionCount = await Transactions.countDocuments();
-  if (!transactionCount) {
-    res.status(500).json({ success: false });
-  }
-  res.send({ transactionCount: transactionCount });
 });
 
 // DELETE

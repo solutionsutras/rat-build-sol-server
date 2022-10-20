@@ -39,13 +39,16 @@ function authJwt() {
           url: /\/api\/v1\/orderstatus\/getbytext(.*)/,
           methods: ['GET', 'OPTIONS'],
         },
+        {
+          url: /\/api\/v1\/orderstatus\/getbycode(.*)/,
+          methods: ['GET', 'OPTIONS'],
+        },
         `${api}/users/login`,
         `${api}/users/otplogin`,
         `${api}/users/register`,
         `${api}/orders`,
         `${api}/orderitems`,
         `${api}/transactions`,
-        `${api}/transactions/get/count`,
         /\/otpsms*/,
       ],
     });

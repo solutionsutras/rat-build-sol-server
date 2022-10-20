@@ -13,9 +13,11 @@ router.get(`/`, async (req, res) => {
       populate: [
         { path: 'item', populate: 'itemCategory quality' },
         { path: 'selectedUnit' },
-        { path: 'vehicle' },
+        { path: 'vehicle', populate: 'selectedVehicle'},
+        { path: 'status' },
       ],
     })
+    .populate('status')
     .populate('user', 'name')
     .sort({ dateOrdered: -1 });
 
@@ -34,9 +36,11 @@ router.get(`/:id`, async (req, res) => {
       populate: [
         { path: 'item', populate: 'itemCategory quality' },
         { path: 'selectedUnit' },
-        { path: 'vehicle' },
+        { path: 'vehicle', populate: 'selectedVehicle' },
+        { path: 'status' },
       ],
     })
+    .populate('status')
     .populate('user', 'name');
 
   if (!singleOrder) {
@@ -50,11 +54,15 @@ router.get(`/get/userorders/:userid`, async (req, res) => {
   const userOrdersList = await Orders.find({ user: req.params.userid })
     .populate({
       path: 'orderItems',
-      populate: {
-        path: 'item',
-        populate: 'itemCategory',
-      },
+      model: 'OrderItems',
+      populate: [
+        { path: 'item', populate: 'itemCategory quality' },
+        { path: 'selectedUnit' },
+        { path: 'vehicle', populate: 'selectedVehicle' },
+        { path: 'status' },
+      ],
     })
+    .populate('status')
     .sort({ dateOrdered: -1 });
 
   if (!userOrdersList) {
@@ -73,14 +81,22 @@ router.post(`/`, async (req, res) => {
         unitName: orderItem.unitName,
         rate: orderItem.rate,
         quantity: orderItem.qty,
+        quantityShipped: 0,
         materialCost: orderItem.materialCost,
         vehicle: orderItem.vehicle,
         fromLocationCode: orderItem.fromLocationCode,
         toLocationCode: orderItem.toLocationCode,
+        minTripDistance: orderItem.minTripDistance,
         tripDistance: orderItem.tripDistance,
-        transportationCost: orderItem.transportationCost,
+        requiredNoOfTrips: orderItem.requiredNoOfTrips,
+        itemTotalTransportationCost: orderItem.itemTotalTransportationCost,
+        discountPercent: orderItem.discountPercent,
+        discountAmount: orderItem.discountAmount,
         itemTotal: orderItem.itemTotal,
-        logistics: req.body.logistics,
+        status: req.body.status,
+        user: req.body.user,
+        lastUpdated: req.body.lastUpdated,
+        lastUpdatedByUser: req.body.lastUpdatedByUser,
       });
 
       newOrderItem = await newOrderItem.save();
@@ -104,21 +120,18 @@ router.post(`/`, async (req, res) => {
 
   let order = new Orders({
     orderItems: orderItemsIdsResolved,
-    shippingAddress1: req.body.shippingAddress1,
-    shippingAddress2: req.body.shippingAddress2,
-    city: req.body.city,
-    state: req.body.state,
-    pin: req.body.pin,
-    country: req.body.country,
-    phone: req.body.phone,
+    billingAddress: req.body.billingAddress,
+    shippingAddress: req.body.shippingAddress,
     status: req.body.status,
     totalPrice: totalPriceSummed,
-    transactions: req.body.transactions,
-    discountPercent: req.body.discountPercent,
     advanceToPay: req.body.advanceToPay,
     advancePaid: req.body.advancePaid,
     balanceToPay: req.body.balanceToPay,
+    transactions: req.body.transactions,
     user: req.body.user,
+    dateOrdered: req.body.dateOrdered,
+    lastUpdated: req.body.lastUpdated,
+    lastUpdatedByUser: req.body.lastUpdatedByUser,
   });
 
   order = await order.save();
@@ -130,16 +143,92 @@ router.post(`/`, async (req, res) => {
   res.send(order);
 });
 
-// UPDATE
-router.put('/:id', async (req, res) => {
+// UPDATE ORDER STATUS
+router.put('/changestatus/:id', async (req, res) => {
+  const orderItems = Promise.all(
+    req.body.orderItems.map(async (orderItem) => {
+      const singleOrderItem = await OrderItems.findByIdAndUpdate(
+        orderItem.id,
+        {
+          status: req.body.status,
+          lastUpdated: req.body.lastUpdated,
+          lastUpdatedByUser: req.body.user,
+        },
+        { new: true }
+      );
+      if (!singleOrderItem) {
+        return res.status(400).send('Error while updating order item status!');
+      }
+      return singleOrderItem;
+    })
+  );
+
   const order = await Orders.findByIdAndUpdate(
     req.params.id,
     {
       status: req.body.status,
-      discountPercent: req.body.discountPercent,
+      lastUpdated: req.body.lastUpdated,
+      lastUpdatedByUser: req.body.user,
+    },
+    { new: true }
+  );
+  if (!order) {
+    return res.status(400).send('Error while updating order status!');
+  }
+
+  res.send(order);
+});
+
+// // UPDATE SINGLE ORDER ITEM STATUS
+// router.put('/changestatus/:id', async (req, res) => {
+//   const orderItems = Promise.all(
+//     req.body.orderItems.map(async (orderItem) => {
+
+//       const singleOrderItem = await OrderItems.findByIdAndUpdate(
+//         orderItem.id,
+//         {
+//           status: req.body.status,
+//           lastUpdated: req.body.lastUpdated,
+//           lastUpdatedByUser: req.body.user,
+//         },
+//         { new: true }
+//       );
+//       if (!singleOrderItem) {
+//         return res.status(400).send('Error while updating order item status!');
+//       }
+
+//       // res.send(singleOrderItem);
+//       return singleOrderItem;
+//     })
+//   );
+
+//   const order = await Orders.findByIdAndUpdate(
+//     req.params.id,
+//     {
+//       status: req.body.status,
+//       lastUpdated: req.body.lastUpdated,
+//       lastUpdatedByUser: req.body.user,
+//     },
+//     { new: true }
+//   );
+//   if (!order) {
+//     return res.status(400).send('Error while updating order status!');
+//   }
+
+//   res.send(order);
+// });
+
+// UPDATE TRANSACTION
+router.put('/transaction/:id', async (req, res) => {
+  const order = await Orders.findByIdAndUpdate(
+    req.params.id,
+    {
+      status: req.body.status,
       advancePaid: req.body.advancePaid,
       balanceToPay: req.body.balanceToPay,
       transactions: req.body.transactions,
+      lastUpdated: req.body.lastUpdated,
+      lastUpdatedByUser: req.body.user,
     },
     { new: true }
   );
@@ -188,7 +277,7 @@ router.get('/get/totalsales', async (req, res) => {
 // GET ORDER COUNT
 router.get('/get/count', async (req, res) => {
   const ordersCount = await Orders.countDocuments();
-  if (!ordersCount) {
+  if (!ordersCount && ordersCount !== 0) {
     res.status(500).json({ success: false });
   }
   res.send({ ordersCount: ordersCount });
