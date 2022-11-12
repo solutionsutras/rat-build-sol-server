@@ -19,6 +19,7 @@ function authJwt() {
         { url: /\/api\/v1\/orders(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/transactions(.*)/, methods: ['GET', 'OPTIONS'] },
         { url: /\/api\/v1\/logistics(.*)/, methods: ['GET', 'OPTIONS'] },
+        { url: /\/api\/v1\/homebanners(.*)/, methods: ['GET', 'OPTIONS'] },
         {
           url: /\/api\/v1\/transactions\/getbyuser(.*)/,
           methods: ['GET', 'OPTIONS'],
@@ -49,6 +50,7 @@ function authJwt() {
         `${api}/orders`,
         `${api}/orderitems`,
         `${api}/transactions`,
+        `${api}/homebanners`,
         /\/otpsms*/,
       ],
     });

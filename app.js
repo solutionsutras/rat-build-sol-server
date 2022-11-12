@@ -37,6 +37,7 @@ const controlsRouter = require('./routers/controls');
 const orderStatusRouter = require('./routers/orderstatus');
 const logisticsRouter = require('./routers/logistics');
 const orderItemsRouter = require('./routers/orderitems');
+const homeBannersRouter = require('./routers/homebanner');
 
 const api= process.env.API_URL;
 
@@ -54,6 +55,7 @@ app.use(`${api}/controls`, controlsRouter);
 app.use(`${api}/orderstatus`, orderStatusRouter);
 app.use(`${api}/logistics`, logisticsRouter);
 app.use(`${api}/orderitems`, orderItemsRouter);
+app.use(`${api}/homebanners`, homeBannersRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{
     useunifiedTopology:false,
