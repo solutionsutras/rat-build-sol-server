@@ -55,11 +55,9 @@ router.get('/get/byfoot/:capacity', async (req, res) => {
   res.status(200).send(vehicle);
 });
 
-// GET BY UNIQUE VEHICLES
-router.get('/getunique', async (req, res) => {
-  const vehicle = await VehiclesModel.find({
-    capacityInFoot: { $gte: parseInt(req.params.capacity) },
-  });
+// GET LOWEST CAPACITY VEHICLE
+router.get('/get/lowestcapacity', async (req, res) => {
+  const vehicle = await VehiclesModel.find().sort({ capacityInFoot: 1 }).limit(1); 
   if (!vehicle) {
     res
       .status(500)
@@ -68,7 +66,6 @@ router.get('/getunique', async (req, res) => {
         message: 'The Vehicle with the given capcity not found!',
       });
   }
-  
   res.status(200).send(vehicle);
 });
 
